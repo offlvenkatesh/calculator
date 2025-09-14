@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Scientific Calculator</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="calculator">
+        <div class="mode-toggle">
+            <button class="mode-btn active" onclick="setMode('basic')">Basic</button>
+            <button class="mode-btn" onclick="setMode('scientific')">Scientific</button>
+        </div>
+        
+        <div class="display">
+            <div class="memory-display" id="memoryDisplay"></div>
+            <div class="history" id="history"></div>
+            <div class="previous-operand" id="previousOperand"></div>
+            <div class="current-operand" id="currentOperand">0</div>
+        </div>
+
+        <div class="scientific-panel" id="scientificPanel">
+            <div class="buttons">
+                <button class="btn btn-memory btn-small ripple" onclick="memoryRecall()">MR</button>
+                <button class="btn btn-memory btn-small ripple" onclick="memoryClear()">MC</button>
+                <button class="btn btn-memory btn-small ripple" onclick="memoryAdd()">M+</button>
+                <button class="btn btn-memory btn-small ripple" onclick="memorySubtract()">M-</button>
+                <button class="btn btn-memory btn-small ripple" onclick="memoryStore()">MS</button>
+                <button class="btn btn-function btn-small ripple" onclick="appendConstant('π')">π</button>
+
+                <button class="btn btn-function ripple" onclick="appendFunction('sin(')">sin</button>
+                <button class="btn btn-function ripple" onclick="appendFunction('cos(')">cos</button>
+                <button class="btn btn-function ripple" onclick="appendFunction('tan(')">tan</button>
+                <button class="btn btn-function ripple" onclick="appendFunction('log(')">log</button>
+                <button class="btn btn-function ripple" onclick="appendFunction('ln(')">ln</button>
+                <button class="btn btn-function ripple" onclick="appendConstant('π')">π</button>
+
+                <button class="btn btn-function ripple" onclick="appendFunction('asin(')">sin⁻¹</button>
+                <button class="btn btn-function ripple" onclick="appendFunction('acos(')">cos⁻¹</button>
+                <button class="btn btn-function ripple" onclick="appendFunction('atan(')">tan⁻¹</button>
+                <button class="btn btn-function ripple" onclick="appendFunction('√(')">√</button>
+                <button class="btn btn-function ripple" onclick="appendOperator('^')">x^y</button>
+                <button class="btn btn-function ripple" onclick="appendConstant('e')">e</button>
+            </div>
+        </div>
+
+        <div id="buttonContainer">
+            <!-- Basic mode buttons -->
+            <div class="basic-buttons" id="basicButtons">
+                <button class="btn btn-clear btn-span-two ripple" onclick="clearAll()">AC</button>
+                <button class="btn btn-clear ripple" onclick="deleteLast()">DEL</button>
+                <button class="btn btn-operator ripple" onclick="appendOperator('/')">/</button>
+                
+                <button class="btn ripple" onclick="appendNumber('7')">7</button>
+                <button class="btn ripple" onclick="appendNumber('8')">8</button>
+                <button class="btn ripple" onclick="appendNumber('9')">9</button>
+                <button class="btn btn-operator ripple" onclick="appendOperator('*')">×</button>
+                
+                <button class="btn ripple" onclick="appendNumber('4')">4</button>
+                <button class="btn ripple" onclick="appendNumber('5')">5</button>
+                <button class="btn ripple" onclick="appendNumber('6')">6</button>
+                <button class="btn btn-operator ripple" onclick="appendOperator('-')">-</button>
+                
+                <button class="btn ripple" onclick="appendNumber('1')">1</button>
+                <button class="btn ripple" onclick="appendNumber('2')">2</button>
+                <button class="btn ripple" onclick="appendNumber('3')">3</button>
+                <button class="btn btn-operator ripple" onclick="appendOperator('+')">+</button>
+                
+                <button class="btn btn-span-two ripple" onclick="appendNumber('0')">0</button>
+                <button class="btn ripple" onclick="appendNumber('.')">.</button>
+                <button class="btn btn-equals ripple" onclick="calculate()">=</button>
+            </div>
+
+            <!-- Scientific mode buttons -->
+            <div class="buttons" id="scientificButtons" style="display: none;">
+                <button class="btn btn-function ripple" onclick="appendOperator('(')">(</button>
+                <button class="btn btn-function ripple" onclick="appendOperator(')')">)</button>
+                <button class="btn btn-clear ripple" onclick="deleteLast()">DEL</button>
+                <button class="btn btn-clear ripple" onclick="clearAll()">AC</button>
+                <button class="btn btn-function ripple" onclick="appendFunction('!')">x!</button>
+                <button class="btn btn-operator ripple" onclick="appendOperator('/')">/</button>
+
+                <button class="btn ripple" onclick="appendNumber('7')">7</button>
+                <button class="btn ripple" onclick="appendNumber('8')">8</button>
+                <button class="btn ripple" onclick="appendNumber('9')">9</button>
+                <button class="btn btn-operator ripple" onclick="appendOperator('*')">×</button>
+                <button class="btn btn-function ripple" onclick="appendOperator('%')">mod</button>
+                <button class="btn btn-function ripple" onclick="appendFunction('1/(')"">1/x</button>
+
+                <button class="btn ripple" onclick="appendNumber('4')">4</button>
+                <button class="btn ripple" onclick="appendNumber('5')">5</button>
+                <button class="btn ripple" onclick="appendNumber('6')">6</button>
+                <button class="btn btn-operator ripple" onclick="appendOperator('-')">-</button>
+                <button class="btn btn-function ripple" onclick="squareNumber()">x²</button>
+                <button class="btn btn-function ripple" onclick="cubeNumber()">x³</button>
+
+                <button class="btn ripple" onclick="appendNumber('1')">1</button>
+                <button class="btn ripple" onclick="appendNumber('2')">2</button>
+                <button class="btn ripple" onclick="appendNumber('3')">3</button>
+                <button class="btn btn-operator ripple" onclick="appendOperator('+')">+</button>
+                <button class="btn btn-function ripple" onclick="toggleSign()">±</button>
+                <button class="btn btn-function ripple" onclick="appendFunction('|(')"">|x|</button>
+
+                <button class="btn btn-span-two ripple" onclick="appendNumber('0')">0</button>
+                <button class="btn ripple" onclick="appendNumber('.')">.</button>
+                <button class="btn btn-function ripple" onclick="appendFunction('random()')">Rnd</button>
+                <button class="btn btn-equals ripple" onclick="calculate()">=</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

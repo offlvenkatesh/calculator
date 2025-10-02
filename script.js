@@ -25,7 +25,9 @@ function updateDisplay() {
 }
 
 function updateMemoryDisplay() {
-    memoryDisplayElement.innerText = memory !== 0 ? `M: ${memory}` : '';
+    if (memoryDisplayElement) {
+        memoryDisplayElement.innerText = memory !== 0 ? `M: ${memory}` : '';
+    }
 }
 
 // Mode Functions
@@ -40,13 +42,13 @@ function setMode(mode) {
     event.target.classList.add('active');
 
     if (isScientific) {
-        basicButtons.style.display = 'none';
-        scientificButtons.style.display = 'grid';
-        scientificPanel.classList.add('active');
+        if (basicButtons) basicButtons.style.display = 'none';
+        if (scientificButtons) scientificButtons.style.display = 'grid';
+        if (scientificPanel) scientificPanel.classList.add('active');
     } else {
-        basicButtons.style.display = 'grid';
-        scientificButtons.style.display = 'none';
-        scientificPanel.classList.remove('active');
+        if (basicButtons) basicButtons.style.display = 'grid';
+        if (scientificButtons) scientificButtons.style.display = 'none';
+        if (scientificPanel) scientificPanel.classList.remove('active');
     }
 }
 
@@ -58,10 +60,12 @@ function appendNumber(number) {
     currentOperand = currentOperand.toString() + number.toString();
     updateDisplay();
     
-    currentOperandElement.style.transform = 'scale(1.02)';
-    setTimeout(() => {
-        currentOperandElement.style.transform = 'scale(1)';
-    }, 100);
+    if (currentOperandElement) {
+        currentOperandElement.style.transform = 'scale(1.02)';
+        setTimeout(() => {
+            currentOperandElement.style.transform = 'scale(1)';
+        }, 100);
+    }
 }
 
 function appendOperator(op) {
@@ -142,9 +146,11 @@ function calculate() {
         }
 
         // Add to history
-        history.unshift(`${previousOperand || currentOperand} = ${result}`);
-        if (history.length > 3) history.pop();
-        historyElement.innerText = history.join(' | ');
+        if (historyElement) {
+            history.unshift(`${previousOperand || currentOperand} = ${result}`);
+            if (history.length > 3) history.pop();
+            historyElement.innerText = history.join(' | ');
+        }
 
         currentOperand = result.toString();
         operation = null;
@@ -152,20 +158,24 @@ function calculate() {
         updateDisplay();
 
         // Success animation
-        currentOperandElement.style.transform = 'scale(1.05)';
-        currentOperandElement.style.color = '#60a5fa';
-        setTimeout(() => {
-            currentOperandElement.style.transform = 'scale(1)';
-            currentOperandElement.style.color = '#e0e0e0';
-        }, 300);
+        if (currentOperandElement) {
+            currentOperandElement.style.transform = 'scale(1.05)';
+            currentOperandElement.style.color = '#60a5fa';
+            setTimeout(() => {
+                currentOperandElement.style.transform = 'scale(1)';
+                currentOperandElement.style.color = '#e0e0e0';
+            }, 300);
+        }
 
     } catch (error) {
         currentOperand = 'Error';
-        currentOperandElement.classList.add('error');
-        setTimeout(() => {
-            currentOperandElement.classList.remove('error');
-            clearAll();
-        }, 2000);
+        if (currentOperandElement) {
+            currentOperandElement.classList.add('error');
+            setTimeout(() => {
+                currentOperandElement.classList.remove('error');
+                clearAll();
+            }, 2000);
+        }
         updateDisplay();
     }
 }
@@ -188,10 +198,12 @@ function clearAll() {
     updateDisplay();
     
     const calculator = document.querySelector('.calculator');
-    calculator.style.transform = 'scale(0.98)';
-    setTimeout(() => {
-        calculator.style.transform = 'scale(1)';
-    }, 150);
+    if (calculator) {
+        calculator.style.transform = 'scale(0.98)';
+        setTimeout(() => {
+            calculator.style.transform = 'scale(1)';
+        }, 150);
+    }
 }
 
 function deleteLast() {
@@ -220,6 +232,14 @@ function toggleSign() {
             ? currentOperand.slice(1) 
             : '-' + currentOperand;
         updateDisplay();
+    }
+}
+
+function toggleAngleMode() {
+    angleMode = angleMode === 'deg' ? 'rad' : 'deg';
+    const angleModeBtn = document.querySelector('.angle-mode-btn');
+    if (angleModeBtn) {
+        angleModeBtn.innerText = angleMode.toUpperCase();
     }
 }
 
@@ -266,10 +286,10 @@ document.addEventListener('keydown', function(event) {
     } else if (event.key === '-') {
         appendOperator('-');
     } else if (event.key === '*') {
-        appendOperator('*');
+        appendOperator('×');
     } else if (event.key === '/') {
         event.preventDefault();
-        appendOperator('/');
+        appendOperator('÷');
     } else if (event.key === '(' || event.key === ')') {
         appendOperator(event.key);
     } else if (event.key === 'Enter' || event.key === '=') {
